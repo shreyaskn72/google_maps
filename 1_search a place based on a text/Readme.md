@@ -19,6 +19,7 @@ Here is an example Python script that uses the Google Places API to search for a
 
 ```python
 import requests
+import json
 
 def search_place(api_key, query, location=None, radius=None):
     # Base URL for Google Places Text Search API
@@ -41,7 +42,11 @@ def search_place(api_key, query, location=None, radius=None):
     
     # Check if the response was successful
     if response.status_code == 200:
-        results = response.json().get('results', [])
+        response_json = response.json()
+        response_dict = json.dumps(response_json, indent=4)
+        print("response dict is")
+        print(response_dict)
+        results = response_json.get('results', [])
         if results:
             for place in results:
                 print(f"Name: {place['name']}")
