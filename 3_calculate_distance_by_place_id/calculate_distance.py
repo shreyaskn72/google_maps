@@ -1,56 +1,18 @@
 import requests
 
 # Your Google API key
-API_KEY = 'YOUR_GOOGLE_API_KEY'
+API_KEY = 'YOUR_GOOGLE_API_KEY'  # Replace with your actual API key
 
-# Base URLs for Google Places API and Google Distance Matrix API
-PLACE_DETAILS_URL = 'https://maps.googleapis.com/maps/api/place/details/json'
+# Base URL for Google Distance Matrix API
 DISTANCE_MATRIX_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json'
 
 
-# Function to get place details (latitude and longitude) from place_id
-def get_place_coordinates(place_id):
-    params = {
-        'place_id': place_id,
-        'key': API_KEY
-    }
-    response = requests.get(PLACE_DETAILS_URL, params=params)
-
-    if response.status_code == 200:
-        data = response.json()
-        if data.get('status') == 'OK':
-            # Extract latitude and longitude from geometry
-            location = data['result'].get('geometry', {}).get('location', {})
-            lat = location.get('lat')
-            lng = location.get('lng')
-            if lat is not None and lng is not None:
-                return lat, lng
-            else:
-                print("Coordinates not found for the place.")
-        else:
-            print(f"Error fetching place details: {data.get('status')}")
-    else:
-        print(f"Failed to fetch place details. HTTP Status code: {response.status_code}")
-
-    return None, None
-
-
-# Function to calculate distance between two places using Google Distance Matrix API
+# Function to calculate distance between two places using their place_ids
 def get_distance_between_places(place_id_1, place_id_2):
-    # Get coordinates for both places
-    lat1, lng1 = get_place_coordinates(place_id_1)
-    lat2, lng2 = get_place_coordinates(place_id_2)
-
-    if lat1 is None or lat2 is None:
-        return "Could not get coordinates for one or both places."
-
-    # Construct the parameters for the Distance Matrix API
-    origins = f"{lat1},{lng1}"
-    destinations = f"{lat2},{lng2}"
-
+    # Construct the parameters for the Distance Matrix API using place_ids directly
     params = {
-        'origins': origins,
-        'destinations': destinations,
+        'origins': f'place_id:{place_id_1}',
+        'destinations': f'place_id:{place_id_2}',
         'key': API_KEY
     }
 
