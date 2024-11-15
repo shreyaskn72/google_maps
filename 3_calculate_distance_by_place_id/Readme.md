@@ -38,6 +38,7 @@ Now that your Google Cloud project is set up, let’s write a Python script that
 
 ```python
 import requests
+import json
 
 # Your Google API key
 API_KEY = 'YOUR_GOOGLE_API_KEY'  # Replace with your actual API key
@@ -56,6 +57,8 @@ def get_distance_between_places(place_id_1, place_id_2):
     
     # Request distance matrix data
     response = requests.get(DISTANCE_MATRIX_URL, params=params)
+    
+    print(json.dumps(response.json(), indent=4))
     
     if response.status_code == 200:
         data = response.json()
